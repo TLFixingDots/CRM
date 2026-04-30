@@ -6,17 +6,24 @@ import 'theme/app_theme.dart';
 import 'core/api/api_client.dart';
 import 'core/provider_observer.dart';
 import 'core/config/env_config.dart';
-import 'feature/auth/presentation/pages/login_page.dart';
+import 'core/local/shared_prefs.dart';
+import 'core/router/app_router.dart';
+import 'core/api/version_service.dart';
+import 'core/utils/logger_service.dart';
 
 Future<void> bootstrap(EnvConfig config) async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-
-      // Set Provider Observer (handled inside ProviderScope)
       
+      // Initialize SharedPreferences
+      await SharedPrefs.init();
+
+      // Check App Version
+      await VersionService.checkVersion();
+
       // Log Environment
-      debugPrint('env : Env.${config.env.name}');
+      LoggerService.log('env : Env.${config.env.name}');
 
       // Initialize Core Services with Env base URL
       DioClient.init(config.baseUrl);
@@ -29,8 +36,7 @@ Future<void> bootstrap(EnvConfig config) async {
       );
     },
     (error, stack) {
-      debugPrint('Global Error: $error');
-      debugPrint('Stack Trace: $stack');
+      LoggerService.error('Global Error', error, stack);
     },
   );
 }
@@ -46,11 +52,11 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: config.appName,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
-          home: const LoginPage(),
+          routerConfig: AppRouter.router,
         );
       },
     );

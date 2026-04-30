@@ -1,7 +1,5 @@
-import 'package:fix_crm_new/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String label;
@@ -21,41 +19,35 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: GoogleFonts.inter(
-            fontSize: 14.sp,
+          style: theme.textTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppColors.textHeading,
+            fontSize: 14.sp,
           ),
         ),
         SizedBox(height: 8.h),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.inputDecorationTheme.fillColor,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(10),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            border: Border.all(color: theme.dividerColor.withAlpha(20)),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,
-              hint: Text(hint, style: TextStyle(color: Colors.grey.shade400, fontSize: 13.sp)),
+              hint: Text(hint, style: theme.inputDecorationTheme.hintStyle?.copyWith(fontSize: 13.sp)),
               isExpanded: true,
-              icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.primary),
+              icon: Icon(Icons.keyboard_arrow_down, color: theme.colorScheme.primary),
               items: items.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
-                  child: Text(item, style: GoogleFonts.inter(fontSize: 14.sp)),
+                  child: Text(item, style: theme.textTheme.bodyLarge?.copyWith(fontSize: 14.sp)),
                 );
               }).toList(),
               onChanged: onChanged,
@@ -65,4 +57,5 @@ class CustomDropdown extends StatelessWidget {
       ],
     );
   }
+
 }

@@ -1,8 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../data/repository/auth_repository.dart';
-import '../../data/model/login_request.dart';
-import '../../data/model/verify_otp_request.dart';
+import '../../data/model/auth_models.dart';
 import 'auth_state.dart';
+import '../../../../core/local/shared_prefs.dart';
+import '../../../../core/local/session_service.dart';
 
 part 'auth_provider.g.dart';
 
@@ -21,7 +22,15 @@ class Auth extends _$Auth {
         LoginRequest(email: email, password: password),
       );
       if (response.status) {
-        state = AuthState.otpSent(email);
+        // Save token and user info
+        if (response.token != null) await SharedPrefs.setToken(response.token!);
+        if (response.result != null) await SharedPrefs.setUser(response.result!);
+        await SharedPrefs.setLoggedIn(true);
+        
+        // Notify router
+        SessionService.onLogin();
+        
+        state = const AuthState.success();
       } else {
         state = AuthState.error(response.message);
       }
@@ -30,14 +39,39 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<void> verifyOtp(String email, String otp) async {
+  Future<void> sendOtp(String mobileNumber) async {
+    state = const AuthState.loading();
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final response = await repository.sendOtp(
+        SendOtpRequest(mobileNumber: mobileNumber),
+      );
+      if (response.status) {
+        state = AuthState.otpSent(mobileNumber);
+      } else {
+        state = AuthState.error(response.message);
+      }
+    } catch (e) {
+      state = AuthState.error(e.toString());
+    }
+  }
+
+  Future<void> verifyOtp(String mobileNumber, String otp) async {
     state = const AuthState.loading();
     try {
       final repository = ref.read(authRepositoryProvider);
       final response = await repository.verifyOtp(
-        VerifyOtpRequest(email: email, otp: otp),
+        VerifyOtpRequest(mobileNumber: mobileNumber, otp: otp),
       );
       if (response.status) {
+        // Save token and user info
+        if (response.token != null) await SharedPrefs.setToken(response.token!);
+        if (response.result != null) await SharedPrefs.setUser(response.result!);
+        await SharedPrefs.setLoggedIn(true);
+
+        // Notify router
+        SessionService.onLogin();
+
         state = const AuthState.success();
       } else {
         state = AuthState.error(response.message);
@@ -45,6 +79,11 @@ class Auth extends _$Auth {
     } catch (e) {
       state = AuthState.error(e.toString());
     }
+  }
+
+  Future<void> logout() async {
+    SessionService.onLogout();
+    state = const AuthState.initial();
   }
 
   void resetStatus() {

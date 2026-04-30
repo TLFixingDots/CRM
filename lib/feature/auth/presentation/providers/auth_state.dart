@@ -6,7 +6,8 @@ part 'auth_state.freezed.dart';
 class AuthState with _$AuthState {
   const factory AuthState.initial() = _Initial;
   const factory AuthState.loading() = _Loading;
-  const factory AuthState.otpSent(String email) = _OtpSent;
+  const factory AuthState.otpSent(String identifier) = _OtpSent;
+
   const factory AuthState.success() = _Success;
   const factory AuthState.error(String message) = _Error;
 }

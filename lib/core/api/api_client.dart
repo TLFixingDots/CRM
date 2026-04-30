@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import '../local/shared_prefs.dart';
+import '../local/session_service.dart';
+import 'network_service.dart';
 
 class DioClient {
   static late Dio _dio;
@@ -29,15 +32,36 @@ class DioClient {
     
     // Add auth interceptor here
     _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // Example: options.headers['authorization'] = 'Bearer ${getStringAsync(apiAuthToken)}';
+      onRequest: (options, handler) async {
+        // Check for connectivity
+        if (!await NetworkService.isConnected()) {
+          return handler.reject(
+            DioException(
+              requestOptions: options,
+              error: 'No Internet Connection',
+              type: DioExceptionType.connectionError,
+            ),
+          );
+        }
+
+        final token = SharedPrefs.getToken();
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
         handler.next(options);
       },
       onResponse: (response, handler) {
         if (response.statusCode == 401) {
           // Handle Global Logout
+          SessionService.onLogout();
         }
         handler.next(response);
+      },
+      onError: (DioException e, handler) {
+        if (e.response?.statusCode == 401) {
+          SessionService.onLogout();
+        }
+        handler.next(e);
       },
     ));
   }

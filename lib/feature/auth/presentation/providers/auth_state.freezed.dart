@@ -21,7 +21,7 @@ mixin _$AuthState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String email) otpSent,
+    required TResult Function(String identifier) otpSent,
     required TResult Function() success,
     required TResult Function(String message) error,
   }) => throw _privateConstructorUsedError;
@@ -29,7 +29,7 @@ mixin _$AuthState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String email)? otpSent,
+    TResult? Function(String identifier)? otpSent,
     TResult? Function()? success,
     TResult? Function(String message)? error,
   }) => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ mixin _$AuthState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String email)? otpSent,
+    TResult Function(String identifier)? otpSent,
     TResult Function()? success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -134,7 +134,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String email) otpSent,
+    required TResult Function(String identifier) otpSent,
     required TResult Function() success,
     required TResult Function(String message) error,
   }) {
@@ -146,7 +146,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String email)? otpSent,
+    TResult? Function(String identifier)? otpSent,
     TResult? Function()? success,
     TResult? Function(String message)? error,
   }) {
@@ -158,7 +158,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String email)? otpSent,
+    TResult Function(String identifier)? otpSent,
     TResult Function()? success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -259,7 +259,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String email) otpSent,
+    required TResult Function(String identifier) otpSent,
     required TResult Function() success,
     required TResult Function(String message) error,
   }) {
@@ -271,7 +271,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String email)? otpSent,
+    TResult? Function(String identifier)? otpSent,
     TResult? Function()? success,
     TResult? Function(String message)? error,
   }) {
@@ -283,7 +283,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String email)? otpSent,
+    TResult Function(String identifier)? otpSent,
     TResult Function()? success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -346,7 +346,7 @@ abstract class _$$OtpSentImplCopyWith<$Res> {
     $Res Function(_$OtpSentImpl) then,
   ) = __$$OtpSentImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String email});
+  $Res call({String identifier});
 }
 
 /// @nodoc
@@ -362,12 +362,12 @@ class __$$OtpSentImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? email = null}) {
+  $Res call({Object? identifier = null}) {
     return _then(
       _$OtpSentImpl(
-        null == email
-            ? _value.email
-            : email // ignore: cast_nullable_to_non_nullable
+        null == identifier
+            ? _value.identifier
+            : identifier // ignore: cast_nullable_to_non_nullable
                 as String,
       ),
     );
@@ -377,14 +377,14 @@ class __$$OtpSentImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$OtpSentImpl implements _OtpSent {
-  const _$OtpSentImpl(this.email);
+  const _$OtpSentImpl(this.identifier);
 
   @override
-  final String email;
+  final String identifier;
 
   @override
   String toString() {
-    return 'AuthState.otpSent(email: $email)';
+    return 'AuthState.otpSent(identifier: $identifier)';
   }
 
   @override
@@ -392,11 +392,12 @@ class _$OtpSentImpl implements _OtpSent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OtpSentImpl &&
-            (identical(other.email, email) || other.email == email));
+            (identical(other.identifier, identifier) ||
+                other.identifier == identifier));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, email);
+  int get hashCode => Object.hash(runtimeType, identifier);
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -411,11 +412,11 @@ class _$OtpSentImpl implements _OtpSent {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String email) otpSent,
+    required TResult Function(String identifier) otpSent,
     required TResult Function() success,
     required TResult Function(String message) error,
   }) {
-    return otpSent(email);
+    return otpSent(identifier);
   }
 
   @override
@@ -423,11 +424,11 @@ class _$OtpSentImpl implements _OtpSent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String email)? otpSent,
+    TResult? Function(String identifier)? otpSent,
     TResult? Function()? success,
     TResult? Function(String message)? error,
   }) {
-    return otpSent?.call(email);
+    return otpSent?.call(identifier);
   }
 
   @override
@@ -435,13 +436,13 @@ class _$OtpSentImpl implements _OtpSent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String email)? otpSent,
+    TResult Function(String identifier)? otpSent,
     TResult Function()? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (otpSent != null) {
-      return otpSent(email);
+      return otpSent(identifier);
     }
     return orElse();
   }
@@ -488,9 +489,9 @@ class _$OtpSentImpl implements _OtpSent {
 }
 
 abstract class _OtpSent implements AuthState {
-  const factory _OtpSent(final String email) = _$OtpSentImpl;
+  const factory _OtpSent(final String identifier) = _$OtpSentImpl;
 
-  String get email;
+  String get identifier;
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -544,7 +545,7 @@ class _$SuccessImpl implements _Success {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String email) otpSent,
+    required TResult Function(String identifier) otpSent,
     required TResult Function() success,
     required TResult Function(String message) error,
   }) {
@@ -556,7 +557,7 @@ class _$SuccessImpl implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String email)? otpSent,
+    TResult? Function(String identifier)? otpSent,
     TResult? Function()? success,
     TResult? Function(String message)? error,
   }) {
@@ -568,7 +569,7 @@ class _$SuccessImpl implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String email)? otpSent,
+    TResult Function(String identifier)? otpSent,
     TResult Function()? success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -696,7 +697,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String email) otpSent,
+    required TResult Function(String identifier) otpSent,
     required TResult Function() success,
     required TResult Function(String message) error,
   }) {
@@ -708,7 +709,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String email)? otpSent,
+    TResult? Function(String identifier)? otpSent,
     TResult? Function()? success,
     TResult? Function(String message)? error,
   }) {
@@ -720,7 +721,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String email)? otpSent,
+    TResult Function(String identifier)? otpSent,
     TResult Function()? success,
     TResult Function(String message)? error,
     required TResult orElse(),

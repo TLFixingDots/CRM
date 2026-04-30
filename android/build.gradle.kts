@@ -16,6 +16,20 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+subprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "androidx.core" && requested.name == "core-ktx") {
+                useVersion("1.13.1")
+            }
+            if (requested.group == "androidx.core" && requested.name == "core") {
+                useVersion("1.13.1")
+            }
+        }
+    }
+}
+
+
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
