@@ -40,9 +40,7 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
             _buildHeader(context),
             _buildSearchAndFilters(),
             Expanded(
-              child: isTablet 
-                ? _buildTabletGrid(isTablet)
-                : _buildMobileList(isTablet),
+              child: _buildUniversalList(isTablet),
             ),
           ],
         ),
@@ -50,37 +48,23 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
     );
   }
 
-  Widget _buildMobileList(bool isTablet) {
+  Widget _buildUniversalList(bool isTablet) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.fromLTRB(
-        16,
+        isTablet ? 40 : 16,
         8,
-        16,
+        isTablet ? 40 : 16,
         140, // Space for bottom navbar
       ),
       child: Center(
-        child: Column(
-          children: _buildVisitCards(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: isTablet ? 600 : double.infinity),
+          child: Column(
+            children: _buildVisitCards(),
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTabletGrid(bool isTablet) {
-    return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(40, 20, 40, 140),
-      physics: const BouncingScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
-        mainAxisExtent: 260, // Fixed height for cards in grid
-      ),
-      itemCount: 4, // Matching the 4 cards in _buildVisitCards
-      itemBuilder: (context, index) {
-        return _getVisitCardByIndex(index);
-      },
     );
   }
 
@@ -127,56 +111,6 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
         outcome: 'Meeting cancelled due to customer unavailability.',
       ),
     ];
-  }
-
-  Widget _getVisitCardByIndex(int index) {
-    switch (index) {
-      case 0:
-        return _buildVisitCard(
-          customerName: 'Global Tech Solutions',
-          contactPerson: 'Rahul Verma',
-          location: 'Hitech City, Hyderabad',
-          date: '12 May 2026',
-          time: '11:30 AM',
-          type: 'Meeting',
-          status: 'Completed',
-          outcome: 'Product demo successful. Customer interested in 10 units. Follow up next week.',
-        );
-      case 1:
-        return _buildVisitCard(
-          customerName: 'Vertex Industries',
-          contactPerson: 'Amit Shah',
-          location: 'Indiranagar, Bangalore',
-          date: '10 May 2026',
-          time: '02:00 PM',
-          type: 'Follow-up',
-          status: 'Pending',
-          outcome: 'Pending quotation approval from their procurement head.',
-        );
-      case 2:
-        return _buildVisitCard(
-          customerName: 'Creative Designs Co.',
-          contactPerson: 'Sana Khan',
-          location: 'Andheri East, Mumbai',
-          date: '08 May 2026',
-          time: '10:00 AM',
-          type: 'Demo',
-          status: 'Completed',
-          outcome: 'Demo done. Asked for technical specifications sheet.',
-        );
-      case 3:
-      default:
-        return _buildVisitCard(
-          customerName: 'Mahindra Logistics',
-          contactPerson: 'Prakash Raj',
-          location: 'Pune Highway, Chakan',
-          date: '05 May 2026',
-          time: '04:15 PM',
-          type: 'Support',
-          status: 'Cancelled',
-          outcome: 'Meeting cancelled due to customer unavailability.',
-        );
-    }
   }
 
   Widget _buildHeader(BuildContext context) {
