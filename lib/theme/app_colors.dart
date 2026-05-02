@@ -30,6 +30,12 @@ class AppColors {
     colors: [grad1, grad2, grad3],
   );
 
+  static LinearGradient primaryGradient = LinearGradient(
+    colors: [primary, primary.withValues(alpha: 0.8)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
   // Glass UI Colors
   static Color glassBackground = Colors.white.withValues(alpha: 0.4);
   static Color glassBorder = Colors.white.withValues(alpha: 0.7);

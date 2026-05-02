@@ -175,133 +175,225 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
 
                       // Customer Info Section
                       GlassCard(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionTitle('Customer Info', Icons.person_rounded),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              label: 'Customer Name',
-                              hint: 'Enter customer or company name',
-                              controller: _customerNameController,
-                              prefixIcon: Icons.business_rounded,
-                            ),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              label: 'Contact Person',
-                              hint: 'Enter contact person name',
-                              controller: _contactPersonController,
-                              prefixIcon: Icons.person_outline_rounded,
-                            ),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              label: 'Phone Number',
-                              hint: 'Enter 10-digit phone number',
-                              controller: _phoneController,
-                              keyboardType: TextInputType.phone,
-                              prefixIcon: Icons.phone_outlined,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Visit Details Section
-                      GlassCard(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionTitle('Visit Details', Icons.calendar_today_rounded),
-                            const SizedBox(height: 16),
-                            
-                            // Date & Time Row
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _buildDatePicker(context),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: _buildTimePicker(context),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            
-                            CustomDropdown(
-                              label: 'Visit Type',
-                              hint: 'Select Visit Type',
-                              items: const ['Meeting', 'Follow-up', 'Demo', 'Support'],
-                              value: _visitType,
-                              onChanged: (val) => setState(() => _visitType = val),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Location Section
-                      GlassCard(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionTitle('Location', Icons.location_on_rounded),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              label: 'Address / Location',
-                              hint: 'Enter full address or area',
-                              controller: _locationController,
-                              prefixIcon: Icons.map_outlined,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Product Details
-                      GlassCard(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionTitle('Product Details', Icons.inventory_2_rounded),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              label: 'Product/Service Interested',
-                              hint: 'Enter product name',
-                              controller: _productController,
-                              prefixIcon: Icons.shopping_bag_outlined,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Discussion & Outcome
-                      GlassCard(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionTitle('Discussion & Outcome', Icons.chat_rounded),
-                            const SizedBox(height: 16),
-                            _buildMultilineTextField(
-                              label: 'Discussion Notes',
-                              hint: 'What was discussed?',
-                              controller: _discussionController,
-                            ),
-                            const SizedBox(height: 16),
-                            _buildMultilineTextField(
-                              label: 'Outcome',
-                              hint: 'What was the final outcome or next steps?',
-                              controller: _outcomeController,
-                            ),
-                          ],
-                        ),
-                      ),
+                         padding: const EdgeInsets.all(24),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             _buildSectionTitle('Customer Info', Icons.person_rounded),
+                             const SizedBox(height: 16),
+                             if (isTablet)
+                               Row(
+                                 children: [
+                                   Expanded(
+                                     child: CustomTextField(
+                                       label: 'Customer Name',
+                                       hint: 'Enter company name',
+                                       controller: _customerNameController,
+                                       prefixIcon: Icons.business_rounded,
+                                     ),
+                                   ),
+                                   const SizedBox(width: 16),
+                                   Expanded(
+                                     child: CustomTextField(
+                                       label: 'Contact Person',
+                                       hint: 'Enter name',
+                                       controller: _contactPersonController,
+                                       prefixIcon: Icons.person_outline_rounded,
+                                     ),
+                                   ),
+                                 ],
+                               )
+                             else ...[
+                               CustomTextField(
+                                 label: 'Customer Name',
+                                 hint: 'Enter customer or company name',
+                                 controller: _customerNameController,
+                                 prefixIcon: Icons.business_rounded,
+                               ),
+                               const SizedBox(height: 16),
+                               CustomTextField(
+                                 label: 'Contact Person',
+                                 hint: 'Enter contact person name',
+                                 controller: _contactPersonController,
+                                 prefixIcon: Icons.person_outline_rounded,
+                               ),
+                             ],
+                             const SizedBox(height: 16),
+                             CustomTextField(
+                               label: 'Phone Number',
+                               hint: 'Enter 10-digit phone number',
+                               controller: _phoneController,
+                               keyboardType: TextInputType.phone,
+                               prefixIcon: Icons.phone_outlined,
+                             ),
+                           ],
+                         ),
+                       ),
+                       const SizedBox(height: 20),
+ 
+                       // Visit Details Section
+                       GlassCard(
+                         padding: const EdgeInsets.all(24),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             _buildSectionTitle('Visit Details', Icons.calendar_today_rounded),
+                             const SizedBox(height: 16),
+                             
+                             // Date & Time Row
+                             Row(
+                               children: [
+                                 Expanded(
+                                   child: _buildDatePicker(context),
+                                 ),
+                                 const SizedBox(width: 16),
+                                 Expanded(
+                                   child: _buildTimePicker(context),
+                                 ),
+                               ],
+                             ),
+                             const SizedBox(height: 16),
+                             
+                             CustomDropdown(
+                               label: 'Visit Type',
+                               hint: 'Select Visit Type',
+                               items: const ['Meeting', 'Follow-up', 'Demo', 'Support'],
+                               value: _visitType,
+                               onChanged: (val) => setState(() => _visitType = val),
+                             ),
+                           ],
+                         ),
+                       ),
+                       const SizedBox(height: 20),
+ 
+                       // Location & Product Row for Tablets
+                       if (isTablet)
+                         Row(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Expanded(
+                               child: GlassCard(
+                                 padding: const EdgeInsets.all(24),
+                                 child: Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     _buildSectionTitle('Location', Icons.location_on_rounded),
+                                     const SizedBox(height: 16),
+                                     CustomTextField(
+                                       label: 'Address / Location',
+                                       hint: 'Enter area',
+                                       controller: _locationController,
+                                       prefixIcon: Icons.map_outlined,
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ),
+                             const SizedBox(width: 20),
+                             Expanded(
+                               child: GlassCard(
+                                 padding: const EdgeInsets.all(24),
+                                 child: Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     _buildSectionTitle('Product Details', Icons.inventory_2_rounded),
+                                     const SizedBox(height: 16),
+                                     CustomTextField(
+                                       label: 'Interested Product',
+                                       hint: 'Enter name',
+                                       controller: _productController,
+                                       prefixIcon: Icons.shopping_bag_outlined,
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ),
+                           ],
+                         )
+                       else ...[
+                         // Location Section (Mobile)
+                         GlassCard(
+                           padding: const EdgeInsets.all(24),
+                           child: Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               _buildSectionTitle('Location', Icons.location_on_rounded),
+                               const SizedBox(height: 16),
+                               CustomTextField(
+                                 label: 'Address / Location',
+                                 hint: 'Enter full address or area',
+                                 controller: _locationController,
+                                 prefixIcon: Icons.map_outlined,
+                               ),
+                             ],
+                           ),
+                         ),
+                         const SizedBox(height: 20),
+ 
+                         // Product Details (Mobile)
+                         GlassCard(
+                           padding: const EdgeInsets.all(24),
+                           child: Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               _buildSectionTitle('Product Details', Icons.inventory_2_rounded),
+                               const SizedBox(height: 16),
+                               CustomTextField(
+                                 label: 'Product/Service Interested',
+                                 hint: 'Enter product name',
+                                 controller: _productController,
+                                 prefixIcon: Icons.shopping_bag_outlined,
+                               ),
+                             ],
+                           ),
+                         ),
+                       ],
+                       const SizedBox(height: 20),
+ 
+                       // Discussion & Outcome
+                       GlassCard(
+                         padding: const EdgeInsets.all(24),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             _buildSectionTitle('Discussion & Outcome', Icons.chat_rounded),
+                             const SizedBox(height: 16),
+                             if (isTablet)
+                               Row(
+                                 children: [
+                                   Expanded(
+                                     child: _buildMultilineTextField(
+                                       label: 'Discussion Notes',
+                                       hint: 'What was discussed?',
+                                       controller: _discussionController,
+                                     ),
+                                   ),
+                                   const SizedBox(width: 16),
+                                   Expanded(
+                                     child: _buildMultilineTextField(
+                                       label: 'Outcome',
+                                       hint: 'Next steps?',
+                                       controller: _outcomeController,
+                                     ),
+                                   ),
+                                 ],
+                               )
+                             else ...[
+                               _buildMultilineTextField(
+                                 label: 'Discussion Notes',
+                                 hint: 'What was discussed?',
+                                 controller: _discussionController,
+                               ),
+                               const SizedBox(height: 16),
+                               _buildMultilineTextField(
+                                 label: 'Outcome',
+                                 hint: 'What was the final outcome or next steps?',
+                                 controller: _outcomeController,
+                               ),
+                             ],
+                           ],
+                         ),
+                       ),
                     ],
                   ),
                 ),

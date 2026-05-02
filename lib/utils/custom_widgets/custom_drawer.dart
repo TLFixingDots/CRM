@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import '../../core/router/app_router.dart';
 import '../../theme/app_colors.dart';
 import '../../core/local/shared_prefs.dart';
 import '../../feature/auth/presentation/providers/auth_provider.dart';
@@ -61,6 +63,14 @@ class CustomDrawer extends ConsumerWidget {
                       title: 'Dashboard',
                       onTap: () => Navigator.pop(context),
                       isSelected: true,
+                    ),
+                    _buildDrawerItem(
+                      icon: Icons.precision_manufacturing_rounded,
+                      title: 'Product Catalog',
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.push(AppRouter.productList);
+                      },
                     ),
                     _buildDrawerItem(
                       icon: Icons.person_rounded,

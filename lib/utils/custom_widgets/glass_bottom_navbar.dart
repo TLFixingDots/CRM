@@ -54,7 +54,7 @@ class GlassBottomNavbar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildNavItem(0, Icons.home_rounded, 'Home'),
-                    _buildNavItem(1, Icons.person_add_rounded, 'Add Lead'),
+                    _buildNavItem(1, Icons.person_add_rounded, 'Leads'),
                     _buildNavItem(2, Icons.location_on_rounded, 'Visit'),
                     _buildNavItem(3, Icons.task_alt_rounded, 'Tasks'),
                   ],
