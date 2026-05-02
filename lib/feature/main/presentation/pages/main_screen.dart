@@ -1,6 +1,7 @@
 import 'package:fix_crm_new/feature/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:fix_crm_new/utils/custom_widgets/custom_drawer.dart';
 import 'package:fix_crm_new/utils/custom_widgets/glass_bottom_navbar.dart';
+import 'package:fix_crm_new/feature/visit/presentation/pages/visit_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MainScreen extends ConsumerStatefulWidget {
@@ -17,7 +18,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> _pages = [
     const DashboardPage(),
     const Center(child: Text('Add Lead Page')),
-    const Center(child: Text('Visit Page')),
+    const VisitListPage(),
     const Center(child: Text('Tasks Page')),
   ];
 

@@ -27,7 +27,8 @@ class CustomDropdown extends StatelessWidget {
           label,
           style: theme.textTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
-            fontSize: 14.sp,
+            fontSize: 11.sp,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
         SizedBox(height: 8.h),
