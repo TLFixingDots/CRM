@@ -9,6 +9,7 @@ import 'package:fix_crm_new/feature/tasks/presentation/pages/task_form_page.dart
 import 'package:fix_crm_new/feature/visit/presentation/pages/visit_list_page.dart';
 import 'package:fix_crm_new/feature/visit/presentation/pages/add_visit_page.dart';
 import 'package:fix_crm_new/feature/products/presentation/pages/product_list_page.dart';
+import 'package:fix_crm_new/feature/products/presentation/pages/product_detail_page.dart';
 
 class AppRouter {
   static const String root = '/';
@@ -81,6 +82,18 @@ class AppRouter {
       GoRoute(
         path: productList,
         builder: (context, state) => const ProductListPage(),
+      ),
+      GoRoute(
+        path: '/product-detail',
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return ProductDetailPage(
+            brand: args['brand']!,
+            category: args['category']!,
+            product: args['product']!,
+            variant: args['variant']!,
+          );
+        },
       ),
     ],
   );

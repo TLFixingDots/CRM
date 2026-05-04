@@ -7,6 +7,7 @@ import '../../../../utils/alert_service.dart';
 import '../../../../utils/loading_overlay.dart';
 import '../../../../utils/lottie_service.dart';
 import '../../../../utils/custom_widgets/responsive_widgets.dart';
+import '../../../../core/local/session_service.dart';
 import '../providers/auth_provider.dart';
 import '../providers/auth_state.dart';
 
@@ -284,6 +285,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               ),
             ],
+          ),
+          SizedBox(height: 20),
+          // Dev Bypass Button (Temporary)
+          TextButton(
+            onPressed: () {
+              SessionService.onLogin();
+              context.go(AppRouter.root);
+            },
+            child: const Text(
+              'Dev Bypass Login',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.underline,
+              ),
+            ),
           ),
           SizedBox(height: 20),
         ],

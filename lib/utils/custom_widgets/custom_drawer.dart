@@ -66,7 +66,7 @@ class CustomDrawer extends ConsumerWidget {
                     ),
                     _buildDrawerItem(
                       icon: Icons.precision_manufacturing_rounded,
-                      title: 'Product Catalog',
+                      title: 'Products',
                       onTap: () {
                         Navigator.pop(context);
                         context.push(AppRouter.productList);
