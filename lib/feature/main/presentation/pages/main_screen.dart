@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../leads/presentation/pages/lead_list_page.dart';
 import '../../../tasks/presentation/pages/task_list_page.dart';
 import '../../../visit/presentation/pages/visit_list_page.dart';
+
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 

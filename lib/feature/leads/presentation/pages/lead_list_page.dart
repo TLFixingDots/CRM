@@ -38,7 +38,11 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
         child: Column(
           children: [
             _buildAnimatedHeader(context),
-            _buildFilterChips(),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: _isSearching ? _buildFilterChips() : const SizedBox.shrink(),
+            ),
             Expanded(
               child: _buildLeadList(isTablet),
             ),
@@ -393,17 +397,6 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
       ),
       child: Icon(icon, color: color, size: size),
     );
-  }
-
-  Color _getPriorityColor(String priority) {
-    switch (priority.toLowerCase()) {
-      case 'high':
-        return Colors.orange;
-      case 'medium':
-        return Colors.blue;
-      default:
-        return Colors.grey;
-    }
   }
 
   Widget _buildCircleAction(IconData icon, VoidCallback onTap, {bool isPrimary = false}) {

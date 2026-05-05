@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../utils/custom_widgets/custom_app_bar.dart';
 import '../../../../utils/custom_widgets/responsive_widgets.dart';
 import 'add_visit_page.dart';
 
@@ -15,6 +15,7 @@ class VisitListPage extends ConsumerStatefulWidget {
 class _VisitListPageState extends ConsumerState<VisitListPage> {
   final _searchController = TextEditingController();
   String _selectedFilter = 'All';
+  bool _isSearching = false;
 
   @override
   void dispose() {
@@ -38,7 +39,11 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
         child: Column(
           children: [
             _buildHeader(context),
-            _buildSearchAndFilters(),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: _isSearching ? _buildSearchAndFilters() : const SizedBox.shrink(),
+            ),
             Expanded(
               child: _buildUniversalList(isTablet),
             ),
@@ -52,18 +57,13 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.fromLTRB(
-        isTablet ? 40 : 16,
+        20,
         8,
-        isTablet ? 40 : 16,
+        20,
         140, // Space for bottom navbar
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: isTablet ? 600 : double.infinity),
-          child: Column(
-            children: _buildVisitCards(),
-          ),
-        ),
+      child: Column(
+        children: _buildVisitCards(),
       ),
     );
   }
@@ -114,73 +114,87 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 10.h),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Visits',
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.secondary,
-                    letterSpacing: -0.5,
-                  ),
+    return CustomAppBar(
+      title: 'Visits',
+      subtitle: 'Record of your customer interactions',
+      showBackButton: false,
+      horizontalPadding: 20,
+      actions: [
+        // Search Toggle Button
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isSearching = !_isSearching;
+              if (!_isSearching) {
+                _searchController.clear();
+              }
+            });
+          },
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return ScaleTransition(scale: animation, child: child);
+            },
+            child: Container(
+              key: ValueKey(_isSearching),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: _isSearching
+                    ? AppColors.primary
+                    : Colors.white.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
+              ),
+              child: Icon(
+                _isSearching ? Icons.close_rounded : Icons.search_rounded,
+                color: _isSearching ? Colors.white : AppColors.secondary,
+                size: 20,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddVisitPage()),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.secondary,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.secondary.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                 ),
-                SizedBox(height: 2.h),
-                Text(
-                  'Record of your customer interactions',
+              ],
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.add_circle_outline_rounded,
+                  color: Colors.white,
+                  size: 16,
+                ),
+                const SizedBox(width: 4),
+                const Text(
+                  'Add',
                   style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary.withValues(alpha: 0.8),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 13,
                   ),
                 ),
               ],
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddVisitPage()),
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: AppColors.secondary,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.secondary.withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.add_circle_outline_rounded, color: Colors.white, size: 16.sp),
-                  SizedBox(width: 4.w),
-                  Text(
-                    'Add',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -188,9 +202,9 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           child: Container(
-            height: 44.h,
+            height: 44,
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(12),
@@ -200,21 +214,21 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search customer or location...',
-                hintStyle: TextStyle(fontSize: 12.sp, color: Colors.black38),
-                prefixIcon: Icon(Icons.search_rounded, color: AppColors.secondary.withValues(alpha: 0.5), size: 18.sp),
+                hintStyle: const TextStyle(fontSize: 12, color: Colors.black38),
+                prefixIcon: Icon(Icons.search_rounded, color: AppColors.secondary.withValues(alpha: 0.5), size: 18),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 10.h),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
               ),
             ),
           ),
         ),
         SizedBox(
-          height: 36.h,
+          height: 36,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             physics: const BouncingScrollPhysics(),
             children: [
               _buildFilterChip('All'),
@@ -225,7 +239,7 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
             ],
           ),
         ),
-        SizedBox(height: 8.h),
+        const SizedBox(height: 8),
       ],
     );
   }
@@ -236,8 +250,8 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
       onTap: () => setState(() => _selectedFilter = label),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        margin: EdgeInsets.only(right: 8.w),
-        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+        margin: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : Colors.white.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(15),
@@ -251,7 +265,7 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
             style: TextStyle(
               color: isSelected ? Colors.white : AppColors.secondary,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-              fontSize: 11.sp,
+              fontSize: 11,
             ),
           ),
         ),
@@ -290,9 +304,9 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16.h),
+      margin: const EdgeInsets.only(bottom: 16),
       child: GlassCard(
-        padding: EdgeInsets.all(16.w),
+        padding: const EdgeInsets.all(16),
         borderRadius: 20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,8 +315,8 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 40.w,
-                  height: 40.w,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: AppColors.secondary.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(10),
@@ -310,15 +324,15 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                   child: Center(
                     child: Text(
                       customerName.substring(0, 1).toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 18.sp,
+                      style: const TextStyle(
+                        fontSize: 18,
                         fontWeight: FontWeight.w900,
                         color: AppColors.secondary,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 12.w),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,21 +343,21 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                           Expanded(
                             child: Text(
                               customerName,
-                              style: TextStyle(
-                                fontSize: 14.sp,
+                              style: const TextStyle(
+                                fontSize: 15,
                                 fontWeight: FontWeight.w900,
                                 color: AppColors.secondary,
                                 letterSpacing: -0.3,
                               ),
                             ),
                           ),
-                          Icon(Icons.more_vert_rounded, size: 16.sp, color: Colors.black26),
+                          const Icon(Icons.more_vert_rounded, size: 16, color: Colors.black26),
                         ],
                       ),
                       Text(
                         contactPerson,
-                        style: TextStyle(
-                          fontSize: 11.sp,
+                        style: const TextStyle(
+                          fontSize: 11,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textSecondary,
                         ),
@@ -353,29 +367,29 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                 ),
               ],
             ),
-            SizedBox(height: 14.h),
+            const SizedBox(height: 14),
             Row(
               children: [
                 _buildCompactInfo(Icons.calendar_today_rounded, date),
-                SizedBox(width: 12.w),
+                const SizedBox(width: 12),
                 _buildCompactInfo(Icons.access_time_rounded, time),
                 const Spacer(),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(
                     children: [
-                      Icon(statusIcon, color: statusColor, size: 10.sp),
-                      SizedBox(width: 4.w),
+                      Icon(statusIcon, color: statusColor, size: 10),
+                      const SizedBox(width: 4),
                       Text(
                         status,
                         style: TextStyle(
                           color: statusColor,
                           fontWeight: FontWeight.w900,
-                          fontSize: 9.sp,
+                          fontSize: 9,
                         ),
                       ),
                     ],
@@ -383,16 +397,16 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                 ),
               ],
             ),
-            SizedBox(height: 10.h),
+            const SizedBox(height: 10),
             Row(
               children: [
-                Icon(Icons.location_on_rounded, size: 13.sp, color: AppColors.primary),
-                SizedBox(width: 4.w),
+                const Icon(Icons.location_on_rounded, size: 13, color: AppColors.primary),
+                const SizedBox(width: 4),
                 Expanded(
                   child: Text(
                     location,
-                    style: TextStyle(
-                      fontSize: 10.sp,
+                    style: const TextStyle(
+                      fontSize: 10,
                       fontWeight: FontWeight.w500,
                       color: AppColors.textSecondary,
                     ),
@@ -400,10 +414,10 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                 ),
               ],
             ),
-            SizedBox(height: 10.h),
+            const SizedBox(height: 10),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(10.w),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
@@ -416,7 +430,7 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                       Text(
                         'Outcome:',
                         style: TextStyle(
-                          fontSize: 9.sp,
+                          fontSize: 9,
                           fontWeight: FontWeight.w800,
                           color: AppColors.secondary.withValues(alpha: 0.6),
                         ),
@@ -424,21 +438,21 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                       const Spacer(),
                       Text(
                         type,
-                        style: TextStyle(
-                          fontSize: 9.sp,
+                        style: const TextStyle(
+                          fontSize: 9,
                           fontWeight: FontWeight.w800,
                           color: AppColors.primary,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 4.h),
+                  const SizedBox(height: 4),
                   Text(
                     outcome,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 10.sp,
+                      fontSize: 10,
                       color: AppColors.secondary.withValues(alpha: 0.8),
                       height: 1.3,
                     ),
@@ -446,11 +460,11 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
                 ],
               ),
             ),
-            SizedBox(height: 12.h),
+            const SizedBox(height: 12),
             Row(
               children: [
                 _buildActionButton(Icons.phone_rounded, 'Call', Colors.blue),
-                SizedBox(width: 8.w),
+                const SizedBox(width: 8),
                 _buildActionButton(Icons.directions_rounded, 'Map', Colors.green),
                 const Spacer(),
                 _buildActionButton(Icons.edit_note_rounded, 'Edit', AppColors.secondary),
@@ -465,12 +479,12 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
   Widget _buildCompactInfo(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 11.sp, color: AppColors.secondary.withValues(alpha: 0.4)),
-        SizedBox(width: 4.w),
+        Icon(icon, size: 11, color: AppColors.secondary.withValues(alpha: 0.4)),
+        const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(
-            fontSize: 10.sp,
+          style: const TextStyle(
+            fontSize: 10,
             fontWeight: FontWeight.w600,
             color: AppColors.textSecondary,
           ),
@@ -481,21 +495,21 @@ class _VisitListPageState extends ConsumerState<VisitListPage> {
 
   Widget _buildActionButton(IconData icon, String label, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          Icon(icon, color: color, size: 12.sp),
-          SizedBox(width: 4.w),
+          Icon(icon, color: color, size: 12),
+          const SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.w800,
-              fontSize: 9.sp,
+              fontSize: 9,
             ),
           ),
         ],

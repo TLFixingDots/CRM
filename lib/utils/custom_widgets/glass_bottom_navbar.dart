@@ -16,8 +16,9 @@ class GlassBottomNavbar extends StatelessWidget {
   Widget build(BuildContext context) {
     // Dynamic bottom padding to handle physical nav bars vs gestures
     final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
-    final isGestureBar = bottomPadding < 20; // Heuristic to detect gesture bar vs button bar
-    
+    final isGestureBar =
+        bottomPadding < 20; // Heuristic to detect gesture bar vs button bar
+
     return Container(
       // Height adapts to the system navigation bar
       height: 65 + (isGestureBar ? 20 : 10),
@@ -79,7 +80,10 @@ class GlassBottomNavbar extends StatelessWidget {
             duration: const Duration(milliseconds: 400),
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary.withValues(alpha: 0.15) : Colors.transparent,
+              color:
+                  isSelected
+                      ? AppColors.primary.withValues(alpha: 0.15)
+                      : Colors.transparent,
               borderRadius: BorderRadius.circular(15),
             ),
             child: Icon(
@@ -102,5 +106,4 @@ class GlassBottomNavbar extends StatelessWidget {
       ),
     );
   }
-
 }

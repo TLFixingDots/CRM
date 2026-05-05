@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../core/local/shared_prefs.dart';
 import '../../../../utils/custom_widgets/responsive_widgets.dart';
+import '../../../../utils/custom_widgets/custom_app_bar.dart';
 import '../providers/dashboard_provider.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -31,20 +32,63 @@ class DashboardPage extends ConsumerWidget {
       ),
       child: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: isTablet ? 40 : 16, 
-            vertical: 16
-          ),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: isTablet ? 1100 : double.infinity),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildCompactHeader(context, ref, filters, user?.name ?? 'Admin'),
-                  
-                  const SizedBox(height: 20),
+        child: Column(
+          children: [
+            CustomAppBar(
+              title: user?.name ?? 'Admin',
+              subtitle: _getGreeting(),
+              leadingIcon: Icons.notes,
+              onBackTap: () => Scaffold.of(context).openDrawer(),
+              horizontalPadding: isTablet ? 40 : 16,
+              actions: [
+                // Filter Icon
+                GestureDetector(
+                  onTap: () => _showFilterPicker(context, ref, filters),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.tune_rounded, color: AppColors.primary, size: 18),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // FY Chip
+                GestureDetector(
+                  onTap: () => _showYearPicker(context, ref, filters),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'FY ${filters.financialYear}',
+                          style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.w800, fontSize: 10),
+                        ),
+                        const Icon(Icons.keyboard_arrow_down, size: 12, color: AppColors.secondary),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isTablet ? 40 : 16, 
+                  vertical: 8
+                ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: isTablet ? 1100 : double.infinity),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
                   
                   // Section 1: Core Activity (Compact 2x2 Wide Cards)
                   _buildSectionTitle('Activity Overview', Icons.analytics_rounded),
@@ -79,76 +123,9 @@ class DashboardPage extends ConsumerWidget {
           ),
         ),
       ),
-    );
+      ])));
   }
 
-  Widget _buildCompactHeader(BuildContext context, WidgetRef ref, DashboardFilters filters, String name) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () => Scaffold.of(context).openDrawer(),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
-            ),
-            child: const Icon(Icons.notes, color: AppColors.secondary, size: 20),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _getGreeting(),
-                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
-              ),
-              Text(
-                name,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.secondary, letterSpacing: -0.5),
-              ),
-            ],
-          ),
-        ),
-        // Filter Icon
-        GestureDetector(
-          onTap: () => _showFilterPicker(context, ref, filters),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.tune_rounded, color: AppColors.primary, size: 18),
-          ),
-        ),
-        const SizedBox(width: 8),
-        // FY Chip
-        GestureDetector(
-          onTap: () => _showYearPicker(context, ref, filters),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppColors.secondary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                Text(
-                  'FY ${filters.financialYear}',
-                  style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.w800, fontSize: 10),
-                ),
-                const Icon(Icons.keyboard_arrow_down, size: 12, color: AppColors.secondary),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   void _showFilterPicker(BuildContext context, WidgetRef ref, DashboardFilters filters) {
     showModalBottomSheet(
