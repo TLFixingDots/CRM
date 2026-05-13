@@ -304,6 +304,12 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
                   const SizedBox(width: 6),
                   Text(lead['date']!, style: const TextStyle(fontSize: 10, color: AppColors.textSecondary, fontWeight: FontWeight.w700)),
                   const Spacer(),
+                  _buildActionIcon(
+                    Icons.request_quote_rounded, 
+                    Colors.deepOrange,
+                    onTap: () => context.push(AppRouter.createQuotation),
+                  ),
+                  const SizedBox(width: 10),
                   _buildActionIcon(Icons.call_rounded, Colors.green),
                   const SizedBox(width: 10),
                   _buildActionIcon(Icons.chat_rounded, const Color(0xFF25D366)),
@@ -388,14 +394,17 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
     );
   }
 
-  Widget _buildActionIcon(IconData icon, Color color, {double size = 18}) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        shape: BoxShape.circle,
+  Widget _buildActionIcon(IconData icon, Color color, {double size = 18, VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: color, size: size),
       ),
-      child: Icon(icon, color: color, size: size),
     );
   }
 

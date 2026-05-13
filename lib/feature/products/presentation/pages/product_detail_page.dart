@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../utils/custom_widgets/responsive_widgets.dart';
+import '../../data/models/product_model.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final String brand;
   final String category;
   final String product;
   final String variant;
+  final Product? productObject;
 
   const ProductDetailPage({
     super.key,
@@ -14,6 +18,7 @@ class ProductDetailPage extends StatelessWidget {
     required this.category,
     required this.product,
     required this.variant,
+    this.productObject,
   });
 
   @override
@@ -45,9 +50,9 @@ class ProductDetailPage extends StatelessWidget {
                       const SizedBox(height: 16),
                       _buildSpecsGrid(),
                       const SizedBox(height: 32),
-                      _buildSectionTitle('Key Highlights'),
+                      _buildSectionTitle('Description'),
                       const SizedBox(height: 16),
-                      _buildHighlights(),
+                      _buildDescription(),
                       const SizedBox(height: 32),
                       _buildActionButtons(),
                       const SizedBox(height: 100),
@@ -90,6 +95,9 @@ class ProductDetailPage extends StatelessWidget {
   }
 
   Widget _buildHeroImage() {
+    // Use real product logo if available, otherwise use a high-quality placeholder
+    final imageUrl = productObject?.fullLogoUrl ?? 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000';
+    
     return Container(
       height: 240,
       width: double.infinity,
@@ -108,9 +116,15 @@ class ProductDetailPage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(
-              'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=1000',
+            CachedNetworkImage(
+              imageUrl: imageUrl,
               fit: BoxFit.cover,
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(color: Colors.white),
+              ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Container(
               decoration: BoxDecoration(
@@ -177,7 +191,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '$product $variant',
+                    productObject?.printName ?? '$product $variant',
                     style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: AppColors.secondary, letterSpacing: -1),
                   ),
                 ],
@@ -187,11 +201,11 @@ class ProductDetailPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const Text(
-                  'Starting from',
+                  'Price',
                   style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
                 ),
                 Text(
-                  '₹12.49 Lakh*',
+                  '₹${productObject?.salePrice ?? '12.49 Lakh*'}',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: AppColors.primary),
                 ),
               ],
@@ -212,21 +226,35 @@ class ProductDetailPage extends StatelessWidget {
   }
 
   Widget _buildSpecsGrid() {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 2.5,
-      children: [
+    List<Widget> children;
+    if (productObject == null) {
+      children = [
         _buildSpecCard(Icons.settings_input_component_rounded, 'Engine', '1498 cc'),
         _buildSpecCard(Icons.bolt_rounded, 'Max Power', '113.18 bhp'),
         _buildSpecCard(Icons.speed_rounded, 'Mileage', '18.4 kmpl'),
         _buildSpecCard(Icons.airline_seat_recline_extra_rounded, 'Seating', '5 Seater'),
-        _buildSpecCard(Icons.local_gas_station_rounded, 'Fuel Type', 'Petrol/Diesel'),
-        _buildSpecCard(Icons.settings_suggest_rounded, 'Transmission', 'Automatic'),
-      ],
+      ];
+    } else {
+      children = [
+        _buildSpecCard(Icons.inventory_2_rounded, 'Unit', productObject!.unit ?? 'N/A'),
+        _buildSpecCard(Icons.receipt_long_rounded, 'HSN/SAC', productObject!.hsnSacCode ?? 'N/A'),
+        _buildSpecCard(Icons.percent_rounded, 'Tax', productObject!.tax?.name ?? 'N/A'),
+        _buildSpecCard(Icons.business_rounded, 'Vendor', productObject!.defaultVendor ?? 'N/A'),
+        _buildSpecCard(Icons.storage_rounded, 'Stock', productObject!.openingStockQty ?? '0'),
+        _buildSpecCard(Icons.toggle_on_rounded, 'Status', productObject!.isActive == 1 ? 'Active' : 'Inactive'),
+      ];
+    }
+
+    return RepaintBoundary(
+      child: GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 2.5,
+        children: children,
+      ),
     );
   }
 
@@ -238,38 +266,28 @@ class ProductDetailPage extends StatelessWidget {
         children: [
           Icon(icon, size: 20, color: AppColors.primary),
           const SizedBox(width: 12),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: const TextStyle(fontSize: 9, color: AppColors.textSecondary, fontWeight: FontWeight.w600)),
-              Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.secondary)),
-            ],
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: const TextStyle(fontSize: 9, color: AppColors.textSecondary, fontWeight: FontWeight.w600)),
+                Text(value, 
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.secondary)),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildHighlights() {
-    final highlights = [
-      'Advanced Driver Assistance Systems (ADAS)',
-      'Panoramic Sunroof with Voice Control',
-      'Ventilated Front Seats',
-      '360 Degree Surround View Camera',
-    ];
-
-    return Column(
-      children: highlights.map((h) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Row(
-          children: [
-            const Icon(Icons.check_circle_rounded, size: 18, color: Colors.green),
-            const SizedBox(width: 12),
-            Text(h, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.secondary)),
-          ],
-        ),
-      )).toList(),
+  Widget _buildDescription() {
+    return Text(
+      productObject?.description ?? 'No description available for this product.',
+      style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5),
     );
   }
 
@@ -279,7 +297,7 @@ class ProductDetailPage extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: () {},
         icon: const Icon(Icons.share_rounded, size: 20),
-        label: const Text('Share Product Brochure', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
+        label: const Text('Share Product Details', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.secondary,
           foregroundColor: Colors.white,

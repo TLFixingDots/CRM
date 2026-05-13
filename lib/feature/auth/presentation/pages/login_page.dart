@@ -37,11 +37,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 600;
-    
+
     ref.listen<AuthState>(authProvider, (previous, next) {
       if (next.maybeMap(loading: (_) => true, orElse: () => false)) {
         LoadingOverlay.show(context);
-      } else if (previous?.maybeMap(loading: (_) => true, orElse: () => false) ?? false) {
+      } else if (previous?.maybeMap(
+            loading: (_) => true,
+            orElse: () => false,
+          ) ??
+          false) {
         LoadingOverlay.hide(context);
       }
 
@@ -52,7 +56,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         },
         success: (_) {
           LottieService.showSuccess(
-            context, 
+            context,
             'You have successfully logged in.',
             onConfirm: () => context.go(AppRouter.root),
           );
@@ -82,8 +86,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           GlassCard(
             borderRadius: isTablet ? 40 : 30,
             padding: EdgeInsets.symmetric(
-              horizontal: isTablet ? 40 : 24, 
-              vertical: isTablet ? 50 : 35
+              horizontal: isTablet ? 40 : 24,
+              vertical: isTablet ? 50 : 35,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,8 +119,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                   child: Row(
                     children: [
-                      _buildToggleItem('Email', _isEmailLogin, isTablet, () => setState(() => _isEmailLogin = true)),
-                      _buildToggleItem('Mobile', !_isEmailLogin, isTablet, () => setState(() => _isEmailLogin = false)),
+                      _buildToggleItem(
+                        'Email',
+                        _isEmailLogin,
+                        isTablet,
+                        () => setState(() => _isEmailLogin = true),
+                      ),
+                      _buildToggleItem(
+                        'Mobile',
+                        !_isEmailLogin,
+                        isTablet,
+                        () => setState(() => _isEmailLogin = false),
+                      ),
                     ],
                   ),
                 ),
@@ -152,7 +166,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ],
 
                 SizedBox(height: isTablet ? 24 : 18),
-                
+
                 // Action Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,19 +182,33 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               width: 18,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: Colors.black26, width: 1.2),
-                                color: _rememberMe ? AppColors.primary : Colors.transparent,
+                                border: Border.all(
+                                  color: Colors.black26,
+                                  width: 1.2,
+                                ),
+                                color:
+                                    _rememberMe
+                                        ? AppColors.primary
+                                        : Colors.transparent,
                               ),
-                              child: _rememberMe 
-                                ? const Icon(Icons.check, size: 14, color: Colors.white) 
-                                : null,
+                              child:
+                                  _rememberMe
+                                      ? const Icon(
+                                        Icons.check,
+                                        size: 14,
+                                        color: Colors.white,
+                                      )
+                                      : null,
                             ),
                             const SizedBox(width: 8),
                             const Flexible(
                               child: Text(
                                 'Remember me',
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 12, color: Colors.black54),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black54,
+                                ),
                               ),
                             ),
                           ],
@@ -210,30 +238,47 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   child: ElevatedButton(
                     onPressed: authState.maybeMap(
                       loading: (_) => null,
-                      orElse: () => () {
-                        if (_isEmailLogin) {
-                          final email = _emailController.text.trim();
-                          final password = _passwordController.text.trim();
-                          final emailRegex = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-                          
-                          if (email.isEmpty || !emailRegex.hasMatch(email)) {
-                            AlertService.showError(context, 'Please enter a valid email address');
-                            return;
-                          }
-                          if (password.isEmpty) {
-                            AlertService.showError(context, 'Please enter your password');
-                            return;
-                          }
-                          ref.read(authProvider.notifier).login(email, password);
-                        } else {
-                          final mobile = _mobileController.text.trim();
-                          if (mobile.isEmpty || mobile.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(mobile)) {
-                            AlertService.showError(context, 'Please enter a valid 10-digit mobile number');
-                            return;
-                          }
-                          ref.read(authProvider.notifier).sendOtp(mobile);
-                        }
-                      },
+                      orElse:
+                          () => () {
+                            if (_isEmailLogin) {
+                              final email = _emailController.text.trim();
+                              final password = _passwordController.text.trim();
+                              final emailRegex = RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                              );
+
+                              if (email.isEmpty ||
+                                  !emailRegex.hasMatch(email)) {
+                                AlertService.showError(
+                                  context,
+                                  'Please enter a valid email address',
+                                );
+                                return;
+                              }
+                              if (password.isEmpty) {
+                                AlertService.showError(
+                                  context,
+                                  'Please enter your password',
+                                );
+                                return;
+                              }
+                              ref
+                                  .read(authProvider.notifier)
+                                  .login(email, password);
+                            } else {
+                              final mobile = _mobileController.text.trim();
+                              if (mobile.isEmpty ||
+                                  mobile.length != 10 ||
+                                  !RegExp(r'^[0-9]+$').hasMatch(mobile)) {
+                                AlertService.showError(
+                                  context,
+                                  'Please enter a valid 10-digit mobile number',
+                                );
+                                return;
+                              }
+                              ref.read(authProvider.notifier).sendOtp(mobile);
+                            }
+                          },
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.secondary,
@@ -270,7 +315,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             children: [
               Text(
                 "Don't have an account? ",
-                style: TextStyle(color: Colors.black54, fontSize: isTablet ? 15 : 13),
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: isTablet ? 15 : 13,
+                ),
               ),
               TextButton(
                 onPressed: () {},
@@ -285,23 +333,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               ),
             ],
-          ),
-          SizedBox(height: 20),
-          // Dev Bypass Button (Temporary)
-          TextButton(
-            onPressed: () {
-              SessionService.onLogin();
-              context.go(AppRouter.root);
-            },
-            child: const Text(
-              'Dev Bypass Login',
-              style: TextStyle(
-                color: Colors.redAccent,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline,
-              ),
-            ),
           ),
           SizedBox(height: 20),
         ],
@@ -351,7 +382,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  Widget _buildToggleItem(String label, bool isSelected, bool isTablet, VoidCallback onTap) {
+  Widget _buildToggleItem(
+    String label,
+    bool isSelected,
+    bool isTablet,
+    VoidCallback onTap,
+  ) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -409,10 +445,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         style: TextStyle(fontSize: isTablet ? 16 : 14, color: Colors.black87),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: Colors.black26, fontSize: isTablet ? 14 : 13),
-          prefixIcon: Icon(icon, color: AppColors.primary, size: isTablet ? 22 : 18),
+          hintStyle: TextStyle(
+            color: Colors.black26,
+            fontSize: isTablet ? 14 : 13,
+          ),
+          prefixIcon: Icon(
+            icon,
+            color: AppColors.primary,
+            size: isTablet ? 22 : 18,
+          ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: isTablet ? 18 : 14, horizontal: 16),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: isTablet ? 18 : 14,
+            horizontal: 16,
+          ),
         ),
       ),
     );

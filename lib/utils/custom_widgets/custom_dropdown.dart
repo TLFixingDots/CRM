@@ -7,6 +7,7 @@ class CustomDropdown extends StatelessWidget {
   final List<String> items;
   final String? value;
   final void Function(String?) onChanged;
+  final String? Function(String?)? validator;
 
   const CustomDropdown({
     super.key,
@@ -15,6 +16,7 @@ class CustomDropdown extends StatelessWidget {
     required this.items,
     this.value,
     required this.onChanged,
+    this.validator,
   });
 
   @override
@@ -32,31 +34,34 @@ class CustomDropdown extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8.h),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          decoration: BoxDecoration(
-            color: theme.inputDecorationTheme.fillColor,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: theme.dividerColor.withAlpha(20)),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              hint: Text(hint, style: theme.inputDecorationTheme.hintStyle?.copyWith(fontSize: 13.sp)),
-              isExpanded: true,
-              icon: Icon(Icons.keyboard_arrow_down, color: theme.colorScheme.primary),
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item, style: theme.textTheme.bodyLarge?.copyWith(fontSize: 14.sp)),
-                );
-              }).toList(),
-              onChanged: onChanged,
+        DropdownButtonFormField<String>(
+          value: value,
+          hint: Text(hint, style: theme.inputDecorationTheme.hintStyle?.copyWith(fontSize: 13.sp)),
+          isExpanded: true,
+          icon: Icon(Icons.keyboard_arrow_down, color: theme.colorScheme.primary),
+          validator: validator,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+            filled: true,
+            fillColor: theme.inputDecorationTheme.fillColor,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: theme.dividerColor.withAlpha(20)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: theme.dividerColor.withAlpha(20)),
             ),
           ),
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item, style: theme.textTheme.bodyLarge?.copyWith(fontSize: 14.sp)),
+            );
+          }).toList(),
+          onChanged: onChanged,
         ),
       ],
     );
   }
-
 }

@@ -48,14 +48,33 @@ class AuthResponse with _$AuthResponse {
 
 @freezed
 class AuthResult with _$AuthResult {
+  const AuthResult._();
+
   const factory AuthResult({
-    @JsonKey(name: 'employee_id') @Default(0) int employeeId,
-    @Default('') String name,
-    @Default('') String email,
-    @Default('') String phone,
+    @JsonKey(name: 'emp_id') @Default(0) int empId,
+    @JsonKey(name: 'business_id') @Default(0) int businessId,
     @JsonKey(name: 'role_id') @Default(0) int roleId,
-    @JsonKey(name: 'role_name') @Default('') String roleName,
+    @Default('') String name,
+    @JsonKey(name: 'emp_phone') @Default('') String empPhone,
+    @Default('') String email,
+    @JsonKey(name: 'emp_code') String? empCode,
+    String? designation,
+    String? region,
+    @JsonKey(name: 'reporting_manager') String? reportingManager,
+    String? otp,
+    @JsonKey(name: 'auth_token') String? authToken,
+    @JsonKey(name: 'emp_is_deleted') @Default(0) int empIsDeleted,
+    @Default(0) int status,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
+    @JsonKey(name: 'deleted_at') String? deletedAt,
   }) = _AuthResult;
 
   factory AuthResult.fromJson(Map<String, dynamic> json) => _$AuthResultFromJson(json);
+
+  String get roleName {
+    if (roleId == 1) return 'Admin';
+    if (roleId == 2) return 'Employee';
+    return 'User';
+  }
 }

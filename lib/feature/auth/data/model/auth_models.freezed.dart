@@ -782,15 +782,34 @@ AuthResult _$AuthResultFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthResult {
-  @JsonKey(name: 'employee_id')
-  int get employeeId => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  String get phone => throw _privateConstructorUsedError;
+  @JsonKey(name: 'emp_id')
+  int get empId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'business_id')
+  int get businessId => throw _privateConstructorUsedError;
   @JsonKey(name: 'role_id')
   int get roleId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'role_name')
-  String get roleName => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'emp_phone')
+  String get empPhone => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'emp_code')
+  String? get empCode => throw _privateConstructorUsedError;
+  String? get designation => throw _privateConstructorUsedError;
+  String? get region => throw _privateConstructorUsedError;
+  @JsonKey(name: 'reporting_manager')
+  String? get reportingManager => throw _privateConstructorUsedError;
+  String? get otp => throw _privateConstructorUsedError;
+  @JsonKey(name: 'auth_token')
+  String? get authToken => throw _privateConstructorUsedError;
+  @JsonKey(name: 'emp_is_deleted')
+  int get empIsDeleted => throw _privateConstructorUsedError;
+  int get status => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
+  String? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
+  String? get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'deleted_at')
+  String? get deletedAt => throw _privateConstructorUsedError;
 
   /// Serializes this AuthResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -810,12 +829,23 @@ abstract class $AuthResultCopyWith<$Res> {
   ) = _$AuthResultCopyWithImpl<$Res, AuthResult>;
   @useResult
   $Res call({
-    @JsonKey(name: 'employee_id') int employeeId,
-    String name,
-    String email,
-    String phone,
+    @JsonKey(name: 'emp_id') int empId,
+    @JsonKey(name: 'business_id') int businessId,
     @JsonKey(name: 'role_id') int roleId,
-    @JsonKey(name: 'role_name') String roleName,
+    String name,
+    @JsonKey(name: 'emp_phone') String empPhone,
+    String email,
+    @JsonKey(name: 'emp_code') String? empCode,
+    String? designation,
+    String? region,
+    @JsonKey(name: 'reporting_manager') String? reportingManager,
+    String? otp,
+    @JsonKey(name: 'auth_token') String? authToken,
+    @JsonKey(name: 'emp_is_deleted') int empIsDeleted,
+    int status,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
+    @JsonKey(name: 'deleted_at') String? deletedAt,
   });
 }
 
@@ -834,45 +864,111 @@ class _$AuthResultCopyWithImpl<$Res, $Val extends AuthResult>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? employeeId = null,
-    Object? name = null,
-    Object? email = null,
-    Object? phone = null,
+    Object? empId = null,
+    Object? businessId = null,
     Object? roleId = null,
-    Object? roleName = null,
+    Object? name = null,
+    Object? empPhone = null,
+    Object? email = null,
+    Object? empCode = freezed,
+    Object? designation = freezed,
+    Object? region = freezed,
+    Object? reportingManager = freezed,
+    Object? otp = freezed,
+    Object? authToken = freezed,
+    Object? empIsDeleted = null,
+    Object? status = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? deletedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
-            employeeId:
-                null == employeeId
-                    ? _value.employeeId
-                    : employeeId // ignore: cast_nullable_to_non_nullable
+            empId:
+                null == empId
+                    ? _value.empId
+                    : empId // ignore: cast_nullable_to_non_nullable
+                        as int,
+            businessId:
+                null == businessId
+                    ? _value.businessId
+                    : businessId // ignore: cast_nullable_to_non_nullable
+                        as int,
+            roleId:
+                null == roleId
+                    ? _value.roleId
+                    : roleId // ignore: cast_nullable_to_non_nullable
                         as int,
             name:
                 null == name
                     ? _value.name
                     : name // ignore: cast_nullable_to_non_nullable
                         as String,
+            empPhone:
+                null == empPhone
+                    ? _value.empPhone
+                    : empPhone // ignore: cast_nullable_to_non_nullable
+                        as String,
             email:
                 null == email
                     ? _value.email
                     : email // ignore: cast_nullable_to_non_nullable
                         as String,
-            phone:
-                null == phone
-                    ? _value.phone
-                    : phone // ignore: cast_nullable_to_non_nullable
-                        as String,
-            roleId:
-                null == roleId
-                    ? _value.roleId
-                    : roleId // ignore: cast_nullable_to_non_nullable
+            empCode:
+                freezed == empCode
+                    ? _value.empCode
+                    : empCode // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            designation:
+                freezed == designation
+                    ? _value.designation
+                    : designation // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            region:
+                freezed == region
+                    ? _value.region
+                    : region // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            reportingManager:
+                freezed == reportingManager
+                    ? _value.reportingManager
+                    : reportingManager // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            otp:
+                freezed == otp
+                    ? _value.otp
+                    : otp // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            authToken:
+                freezed == authToken
+                    ? _value.authToken
+                    : authToken // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            empIsDeleted:
+                null == empIsDeleted
+                    ? _value.empIsDeleted
+                    : empIsDeleted // ignore: cast_nullable_to_non_nullable
                         as int,
-            roleName:
-                null == roleName
-                    ? _value.roleName
-                    : roleName // ignore: cast_nullable_to_non_nullable
-                        as String,
+            status:
+                null == status
+                    ? _value.status
+                    : status // ignore: cast_nullable_to_non_nullable
+                        as int,
+            createdAt:
+                freezed == createdAt
+                    ? _value.createdAt
+                    : createdAt // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            updatedAt:
+                freezed == updatedAt
+                    ? _value.updatedAt
+                    : updatedAt // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            deletedAt:
+                freezed == deletedAt
+                    ? _value.deletedAt
+                    : deletedAt // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -889,12 +985,23 @@ abstract class _$$AuthResultImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'employee_id') int employeeId,
-    String name,
-    String email,
-    String phone,
+    @JsonKey(name: 'emp_id') int empId,
+    @JsonKey(name: 'business_id') int businessId,
     @JsonKey(name: 'role_id') int roleId,
-    @JsonKey(name: 'role_name') String roleName,
+    String name,
+    @JsonKey(name: 'emp_phone') String empPhone,
+    String email,
+    @JsonKey(name: 'emp_code') String? empCode,
+    String? designation,
+    String? region,
+    @JsonKey(name: 'reporting_manager') String? reportingManager,
+    String? otp,
+    @JsonKey(name: 'auth_token') String? authToken,
+    @JsonKey(name: 'emp_is_deleted') int empIsDeleted,
+    int status,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
+    @JsonKey(name: 'deleted_at') String? deletedAt,
   });
 }
 
@@ -912,45 +1019,111 @@ class __$$AuthResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? employeeId = null,
-    Object? name = null,
-    Object? email = null,
-    Object? phone = null,
+    Object? empId = null,
+    Object? businessId = null,
     Object? roleId = null,
-    Object? roleName = null,
+    Object? name = null,
+    Object? empPhone = null,
+    Object? email = null,
+    Object? empCode = freezed,
+    Object? designation = freezed,
+    Object? region = freezed,
+    Object? reportingManager = freezed,
+    Object? otp = freezed,
+    Object? authToken = freezed,
+    Object? empIsDeleted = null,
+    Object? status = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? deletedAt = freezed,
   }) {
     return _then(
       _$AuthResultImpl(
-        employeeId:
-            null == employeeId
-                ? _value.employeeId
-                : employeeId // ignore: cast_nullable_to_non_nullable
+        empId:
+            null == empId
+                ? _value.empId
+                : empId // ignore: cast_nullable_to_non_nullable
+                    as int,
+        businessId:
+            null == businessId
+                ? _value.businessId
+                : businessId // ignore: cast_nullable_to_non_nullable
+                    as int,
+        roleId:
+            null == roleId
+                ? _value.roleId
+                : roleId // ignore: cast_nullable_to_non_nullable
                     as int,
         name:
             null == name
                 ? _value.name
                 : name // ignore: cast_nullable_to_non_nullable
                     as String,
+        empPhone:
+            null == empPhone
+                ? _value.empPhone
+                : empPhone // ignore: cast_nullable_to_non_nullable
+                    as String,
         email:
             null == email
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                     as String,
-        phone:
-            null == phone
-                ? _value.phone
-                : phone // ignore: cast_nullable_to_non_nullable
-                    as String,
-        roleId:
-            null == roleId
-                ? _value.roleId
-                : roleId // ignore: cast_nullable_to_non_nullable
+        empCode:
+            freezed == empCode
+                ? _value.empCode
+                : empCode // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        designation:
+            freezed == designation
+                ? _value.designation
+                : designation // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        region:
+            freezed == region
+                ? _value.region
+                : region // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        reportingManager:
+            freezed == reportingManager
+                ? _value.reportingManager
+                : reportingManager // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        otp:
+            freezed == otp
+                ? _value.otp
+                : otp // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        authToken:
+            freezed == authToken
+                ? _value.authToken
+                : authToken // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        empIsDeleted:
+            null == empIsDeleted
+                ? _value.empIsDeleted
+                : empIsDeleted // ignore: cast_nullable_to_non_nullable
                     as int,
-        roleName:
-            null == roleName
-                ? _value.roleName
-                : roleName // ignore: cast_nullable_to_non_nullable
-                    as String,
+        status:
+            null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                    as int,
+        createdAt:
+            freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        updatedAt:
+            freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        deletedAt:
+            freezed == deletedAt
+                ? _value.deletedAt
+                : deletedAt // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -958,41 +1131,82 @@ class __$$AuthResultImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AuthResultImpl implements _AuthResult {
+class _$AuthResultImpl extends _AuthResult {
   const _$AuthResultImpl({
-    @JsonKey(name: 'employee_id') this.employeeId = 0,
-    this.name = '',
-    this.email = '',
-    this.phone = '',
+    @JsonKey(name: 'emp_id') this.empId = 0,
+    @JsonKey(name: 'business_id') this.businessId = 0,
     @JsonKey(name: 'role_id') this.roleId = 0,
-    @JsonKey(name: 'role_name') this.roleName = '',
-  });
+    this.name = '',
+    @JsonKey(name: 'emp_phone') this.empPhone = '',
+    this.email = '',
+    @JsonKey(name: 'emp_code') this.empCode,
+    this.designation,
+    this.region,
+    @JsonKey(name: 'reporting_manager') this.reportingManager,
+    this.otp,
+    @JsonKey(name: 'auth_token') this.authToken,
+    @JsonKey(name: 'emp_is_deleted') this.empIsDeleted = 0,
+    this.status = 0,
+    @JsonKey(name: 'created_at') this.createdAt,
+    @JsonKey(name: 'updated_at') this.updatedAt,
+    @JsonKey(name: 'deleted_at') this.deletedAt,
+  }) : super._();
 
   factory _$AuthResultImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthResultImplFromJson(json);
 
   @override
-  @JsonKey(name: 'employee_id')
-  final int employeeId;
+  @JsonKey(name: 'emp_id')
+  final int empId;
   @override
-  @JsonKey()
-  final String name;
-  @override
-  @JsonKey()
-  final String email;
-  @override
-  @JsonKey()
-  final String phone;
+  @JsonKey(name: 'business_id')
+  final int businessId;
   @override
   @JsonKey(name: 'role_id')
   final int roleId;
   @override
-  @JsonKey(name: 'role_name')
-  final String roleName;
+  @JsonKey()
+  final String name;
+  @override
+  @JsonKey(name: 'emp_phone')
+  final String empPhone;
+  @override
+  @JsonKey()
+  final String email;
+  @override
+  @JsonKey(name: 'emp_code')
+  final String? empCode;
+  @override
+  final String? designation;
+  @override
+  final String? region;
+  @override
+  @JsonKey(name: 'reporting_manager')
+  final String? reportingManager;
+  @override
+  final String? otp;
+  @override
+  @JsonKey(name: 'auth_token')
+  final String? authToken;
+  @override
+  @JsonKey(name: 'emp_is_deleted')
+  final int empIsDeleted;
+  @override
+  @JsonKey()
+  final int status;
+  @override
+  @JsonKey(name: 'created_at')
+  final String? createdAt;
+  @override
+  @JsonKey(name: 'updated_at')
+  final String? updatedAt;
+  @override
+  @JsonKey(name: 'deleted_at')
+  final String? deletedAt;
 
   @override
   String toString() {
-    return 'AuthResult(employeeId: $employeeId, name: $name, email: $email, phone: $phone, roleId: $roleId, roleName: $roleName)';
+    return 'AuthResult(empId: $empId, businessId: $businessId, roleId: $roleId, name: $name, empPhone: $empPhone, email: $email, empCode: $empCode, designation: $designation, region: $region, reportingManager: $reportingManager, otp: $otp, authToken: $authToken, empIsDeleted: $empIsDeleted, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
 
   @override
@@ -1000,26 +1214,55 @@ class _$AuthResultImpl implements _AuthResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuthResultImpl &&
-            (identical(other.employeeId, employeeId) ||
-                other.employeeId == employeeId) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.empId, empId) || other.empId == empId) &&
+            (identical(other.businessId, businessId) ||
+                other.businessId == businessId) &&
             (identical(other.roleId, roleId) || other.roleId == roleId) &&
-            (identical(other.roleName, roleName) ||
-                other.roleName == roleName));
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.empPhone, empPhone) ||
+                other.empPhone == empPhone) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.empCode, empCode) || other.empCode == empCode) &&
+            (identical(other.designation, designation) ||
+                other.designation == designation) &&
+            (identical(other.region, region) || other.region == region) &&
+            (identical(other.reportingManager, reportingManager) ||
+                other.reportingManager == reportingManager) &&
+            (identical(other.otp, otp) || other.otp == otp) &&
+            (identical(other.authToken, authToken) ||
+                other.authToken == authToken) &&
+            (identical(other.empIsDeleted, empIsDeleted) ||
+                other.empIsDeleted == empIsDeleted) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
     runtimeType,
-    employeeId,
-    name,
-    email,
-    phone,
+    empId,
+    businessId,
     roleId,
-    roleName,
+    name,
+    empPhone,
+    email,
+    empCode,
+    designation,
+    region,
+    reportingManager,
+    otp,
+    authToken,
+    empIsDeleted,
+    status,
+    createdAt,
+    updatedAt,
+    deletedAt,
   );
 
   /// Create a copy of AuthResult
@@ -1036,34 +1279,76 @@ class _$AuthResultImpl implements _AuthResult {
   }
 }
 
-abstract class _AuthResult implements AuthResult {
+abstract class _AuthResult extends AuthResult {
   const factory _AuthResult({
-    @JsonKey(name: 'employee_id') final int employeeId,
-    final String name,
-    final String email,
-    final String phone,
+    @JsonKey(name: 'emp_id') final int empId,
+    @JsonKey(name: 'business_id') final int businessId,
     @JsonKey(name: 'role_id') final int roleId,
-    @JsonKey(name: 'role_name') final String roleName,
+    final String name,
+    @JsonKey(name: 'emp_phone') final String empPhone,
+    final String email,
+    @JsonKey(name: 'emp_code') final String? empCode,
+    final String? designation,
+    final String? region,
+    @JsonKey(name: 'reporting_manager') final String? reportingManager,
+    final String? otp,
+    @JsonKey(name: 'auth_token') final String? authToken,
+    @JsonKey(name: 'emp_is_deleted') final int empIsDeleted,
+    final int status,
+    @JsonKey(name: 'created_at') final String? createdAt,
+    @JsonKey(name: 'updated_at') final String? updatedAt,
+    @JsonKey(name: 'deleted_at') final String? deletedAt,
   }) = _$AuthResultImpl;
+  const _AuthResult._() : super._();
 
   factory _AuthResult.fromJson(Map<String, dynamic> json) =
       _$AuthResultImpl.fromJson;
 
   @override
-  @JsonKey(name: 'employee_id')
-  int get employeeId;
+  @JsonKey(name: 'emp_id')
+  int get empId;
   @override
-  String get name;
-  @override
-  String get email;
-  @override
-  String get phone;
+  @JsonKey(name: 'business_id')
+  int get businessId;
   @override
   @JsonKey(name: 'role_id')
   int get roleId;
   @override
-  @JsonKey(name: 'role_name')
-  String get roleName;
+  String get name;
+  @override
+  @JsonKey(name: 'emp_phone')
+  String get empPhone;
+  @override
+  String get email;
+  @override
+  @JsonKey(name: 'emp_code')
+  String? get empCode;
+  @override
+  String? get designation;
+  @override
+  String? get region;
+  @override
+  @JsonKey(name: 'reporting_manager')
+  String? get reportingManager;
+  @override
+  String? get otp;
+  @override
+  @JsonKey(name: 'auth_token')
+  String? get authToken;
+  @override
+  @JsonKey(name: 'emp_is_deleted')
+  int get empIsDeleted;
+  @override
+  int get status;
+  @override
+  @JsonKey(name: 'created_at')
+  String? get createdAt;
+  @override
+  @JsonKey(name: 'updated_at')
+  String? get updatedAt;
+  @override
+  @JsonKey(name: 'deleted_at')
+  String? get deletedAt;
 
   /// Create a copy of AuthResult
   /// with the given fields replaced by the non-null parameter values.

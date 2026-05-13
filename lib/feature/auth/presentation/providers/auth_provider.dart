@@ -82,8 +82,16 @@ class Auth extends _$Auth {
   }
 
   Future<void> logout() async {
-    SessionService.onLogout();
-    state = const AuthState.initial();
+    state = const AuthState.loading();
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      await repository.logout();
+    } catch (e) {
+      // API failure shouldn't block local logout
+    } finally {
+      SessionService.onLogout();
+      state = const AuthState.initial();
+    }
   }
 
   void resetStatus() {

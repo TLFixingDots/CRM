@@ -34,8 +34,18 @@ class AuthRepository {
     );
     return AuthResponse.fromJson(response.data);
   }
-}
 
+  Future<bool> logout() async {
+    dev.log('[AuthRepository] POST ${ApiStrings.logout}', name: 'flutter');
+    try {
+      final response = await DioClient.post(ApiStrings.logout);
+      return response.data['status'] == true;
+    } catch (e) {
+      dev.log('[AuthRepository] Logout API failed: $e', name: 'flutter');
+      return false;
+    }
+  }
+}
 
 @riverpod
 AuthRepository authRepository(Ref ref) {

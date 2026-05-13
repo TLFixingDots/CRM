@@ -7,7 +7,8 @@ class ApiStrings {
 
   // Endpoints
   static const String login = '/employee-login';
-  static const String sendOtp = '/send-otp';
-  static const String verifyOtp = '/verify-otp';
+  static const String sendOtp = '/sendotp-login';
+  static const String verifyOtp = '/verifyotp-login';
+  static const String products = '/products';
+  static const String logout = '/logout';
 }
-

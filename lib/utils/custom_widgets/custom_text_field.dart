@@ -8,6 +8,9 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final IconData? prefixIcon;
   final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
+  final int? maxLength;
+  final void Function(String)? onChanged;
 
   const CustomTextField({
     super.key,
@@ -17,6 +20,9 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.keyboardType,
+    this.validator,
+    this.maxLength,
+    this.onChanged,
   });
 
   @override
@@ -34,14 +40,18 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8.h),
-        TextField(
+        TextFormField(
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,
+          validator: validator,
+          maxLength: maxLength,
+          onChanged: onChanged,
           style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15.sp),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: theme.colorScheme.primary) : null,
+            counterText: "", // Hide character counter if maxLength is provided
           ),
         ),
       ],

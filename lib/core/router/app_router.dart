@@ -10,6 +10,7 @@ import 'package:fix_crm_new/feature/visit/presentation/pages/visit_list_page.dar
 import 'package:fix_crm_new/feature/visit/presentation/pages/add_visit_page.dart';
 import 'package:fix_crm_new/feature/products/presentation/pages/product_list_page.dart';
 import 'package:fix_crm_new/feature/products/presentation/pages/product_detail_page.dart';
+import '../../feature/quotations/presentation/pages/create_quotation_page.dart';
 
 class AppRouter {
   static const String root = '/';
@@ -21,6 +22,7 @@ class AppRouter {
   static const String visitList = '/visits';
   static const String visitForm = '/visit-form';
   static const String productList = '/products';
+  static const String createQuotation = '/create-quotation';
 
   static final router = GoRouter(
     initialLocation: root,
@@ -92,8 +94,13 @@ class AppRouter {
             category: args['category']!,
             product: args['product']!,
             variant: args['variant']!,
+            productObject: args['productObject'],
           );
         },
+      ),
+      GoRoute(
+        path: createQuotation,
+        builder: (context, state) => const CreateQuotationPage(),
       ),
     ],
   );

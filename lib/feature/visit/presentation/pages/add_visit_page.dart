@@ -16,6 +16,9 @@ class AddVisitPage extends ConsumerStatefulWidget {
 }
 
 class _AddVisitPageState extends ConsumerState<AddVisitPage> {
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+
   // Customer Info
   final _customerNameController = TextEditingController();
   final _contactPersonController = TextEditingController();
@@ -111,8 +114,10 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
         decoration: const BoxDecoration(gradient: AppColors.mainGradient),
         child: SafeArea(
           bottom: false,
-          child: Column(
-            children: [
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
               CustomAppBar(
                 title: 'Add New Visit',
                 subtitle: 'Record details of your customer visit.',
@@ -152,6 +157,12 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
                                 hint: 'Enter customer or company name',
                                 controller: _customerNameController,
                                 prefixIcon: Icons.business_rounded,
+                                validator: (val) {
+                                  if (val == null || val.trim().isEmpty) {
+                                    return 'Please enter a customer name';
+                                  }
+                                  return null;
+                                },
                               ),
                               const SizedBox(height: 16),
                               CustomTextField(
@@ -167,6 +178,16 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
                                 controller: _phoneController,
                                 keyboardType: TextInputType.phone,
                                 prefixIcon: Icons.phone_outlined,
+                                maxLength: 10,
+                                validator: (val) {
+                                  if (val == null || val.trim().isEmpty) {
+                                    return 'Please enter phone number';
+                                  }
+                                  if (val.length != 10) {
+                                    return 'Please enter exactly 10 digits';
+                                  }
+                                  return null;
+                                },
                               ),
                             ],
                           ),
@@ -205,6 +226,12 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
                                   'Support',
                                 ],
                                 value: _visitType,
+                                validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return 'Please select a visit type';
+                                  }
+                                  return null;
+                                },
                                 onChanged:
                                     (val) => setState(() => _visitType = val),
                               ),
@@ -316,9 +343,7 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
                         ],
                       ),
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Validate and submit
-                        },
+                        onPressed: _isLoading ? null : _submitForm,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.secondary,
                           shape: RoundedRectangleBorder(
@@ -326,14 +351,20 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Submit Visit',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: _isLoading 
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            )
+                          : const Text(
+                              'Submit Visit',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                       ),
                     ),
                   ),
@@ -341,6 +372,7 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -491,7 +523,7 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
           controller: controller,
           maxLines: 4,
           minLines: 3,
@@ -500,5 +532,52 @@ class _AddVisitPageState extends ConsumerState<AddVisitPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      if (_visitDate == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a visit date')),
+        );
+        return;
+      }
+      if (_visitTime == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a visit time')),
+        );
+        return;
+      }
+
+      setState(() => _isLoading = true);
+
+      // Simulate network delay
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Visit added successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        
+        // Clear the form
+        _formKey.currentState?.reset();
+        _customerNameController.clear();
+        _contactPersonController.clear();
+        _phoneController.clear();
+        _locationController.clear();
+        _discussionController.clear();
+        _outcomeController.clear();
+        _productController.clear();
+        setState(() {
+          _visitDate = null;
+          _visitTime = null;
+          _visitType = null;
+        });
+      }
+    }
   }
 }
